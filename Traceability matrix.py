@@ -3,7 +3,7 @@ import pandas as pd
 import openpyxl
 
 import csv
-
+import pprint
 
     # 余分な文字列の削除
 def replace_str(string):
@@ -97,8 +97,19 @@ for i in range(0,webscraping.TableSize()):
     sheat_tables.append(wb.create_sheet())
 
 
-
 # 保存
 wb.save('example.xlsx')
 
 
+tableMatrix = []
+for table in webscraping.Tables:
+    #Here you can do whatever you want with the data! You can findAll table row headers, etc...
+    list_of_rows = []
+    for row in table.findAll('tr')[0:]:
+        list_of_cells = []
+        for cell in row.findAll('td'):
+            text = cell.text.replace('&nbsp;', '')
+            list_of_cells.append(text)
+        list_of_rows.append(list_of_cells)
+    tableMatrix.append((list_of_rows, list_of_cells))
+pprint.pprint(tableMatrix[3], width=40)
